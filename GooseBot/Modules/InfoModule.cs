@@ -1,16 +1,15 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
-using GooseBot.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GooseBot.Modules
 {
-
     public class InfoModule : ModuleBase<SocketCommandContext>
     {
+        private const ulong GooseBotUserId = 752596003378561046;
+
         [Command("!say")]
         [Summary("Echoes a message.")]
         public Task SayAsync([Remainder] string echo) => ReplyAsync(echo);
@@ -35,7 +34,23 @@ namespace GooseBot.Modules
         [Summary("Honk at a good friend")]
         public async Task HonkAsync()
         {
-            await ReplyAsync($"<@103325209133592576> Honk!");
+            List<ulong> userIds = new List<ulong>();
+            IReadOnlyCollection<SocketGuild> guilds = Context.Client.Guilds;
+            
+            foreach (SocketGuild guild in guilds)
+            {
+                foreach (SocketGuildUser user in guild.Users)
+                {
+                    if (userIds.Contains(user.Id) || user.Id == GooseBotUserId)
+                        continue;
+
+                    userIds.Add(user.Id);
+                }
+            }
+
+            Random randy = new Random();
+            int indexToHonkAt = randy.Next(0, (userIds.Count - 1));
+            await ReplyAsync($"<@{userIds[indexToHonkAt]}> Honk!");
         }
     }
 }
