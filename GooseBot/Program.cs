@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Net.Rest;
+using Discord.WebSocket;
 using DiscordBotsList.Api;
 using DiscordBotsList.Api.Objects;
 using System;
@@ -9,35 +10,28 @@ namespace GooseBot
 {
     class Program
     {
-        static void Main(string[] args) 
+        private DiscordSocketClient _client;
+
+        static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
-        
+
         public async Task MainAsync()
         {
-            DoBotStuff();
+            _client = new DiscordSocketClient();
+            _client.Log += ConsoleLogger;
+
+            string botToken = Environment.GetEnvironmentVariable("GooseBotToken");
+
+            await _client.LoginAsync(TokenType.Bot, botToken);
+            await _client.StartAsync();
+
+            await Task.Delay(-1);
         }
-        //public static async void DoInDiscordApi()
-        //{
-        //    IDiscordClient client;
-        //    client = Discord.conn
-        //}
 
-        public static async void DoBotStuff()
+        private Task ConsoleLogger(LogMessage message)
         {
-            DiscordBotListApi discordBotList = new DiscordBotListApi();
-            try
-            {
-                var botTask = discordBotList.GetBotAsync(752596003378561046);
-                var bot = await botTask;
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-            Console.WriteLine("TEST");
-
-
+            Console.WriteLine(message.Message);
+            return Task.CompletedTask;
         }
     }
 }
