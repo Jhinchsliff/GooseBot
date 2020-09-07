@@ -1,8 +1,5 @@
 ﻿using Discord;
-using Discord.Net.Rest;
 using Discord.WebSocket;
-using DiscordBotsList.Api;
-using DiscordBotsList.Api.Objects;
 using System;
 using System.Threading.Tasks;
 
@@ -25,7 +22,14 @@ namespace GooseBot
             await _client.LoginAsync(TokenType.Bot, botToken);
             await _client.StartAsync();
 
+            AppDomain.CurrentDomain.ProcessExit += CloseDiscordConnection;
             await Task.Delay(-1);
+        }
+
+        private async void CloseDiscordConnection(object sender, EventArgs e)
+        {
+            await _client.StopAsync();
+            await _client.LogoutAsync();
         }
 
         private Task ConsoleLogger(LogMessage message)
