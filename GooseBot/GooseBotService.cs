@@ -31,9 +31,7 @@ namespace GooseBot
             await _client.StartAsync();
 
             _commands = new CommandService();
-
             _client.MessageReceived += HandleBotCommandAsync;
-            //await Task.Delay(-1);
         }
         public async void Stop()
         {
