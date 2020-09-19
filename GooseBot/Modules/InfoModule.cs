@@ -50,7 +50,7 @@ namespace GooseBot.Modules
 
             Random randy = new Random();
             int indexToHonkAt = randy.Next(0, (userIds.Count - 1));
-            await ReplyAsync($"<@{userIds[indexToHonkAt]}> Honk!");
+            await ReplyAsync($"<@{userIds[indexToHonkAt]}> https://tenor.com/bgig0.gif");
         }
     }
 }
