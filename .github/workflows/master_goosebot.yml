@@ -31,5 +31,5 @@ jobs:
       with:
         app-name: 'goosebot'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_0e0127112a9243088c5fc5719646ded7 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_376b7536fb2c44c18490a8f7d647e781 }}
         package: ${{env.DOTNET_ROOT}}/myapp 
