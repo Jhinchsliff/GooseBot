@@ -3,9 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using GooseBot.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GooseBot
