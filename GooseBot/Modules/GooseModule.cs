@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GooseBot.Modules
 {
-    public class InfoModule : ModuleBase<SocketCommandContext>
+    public class GooseModule : ModuleBase<SocketCommandContext>
     {
         private const ulong GooseBotUserId = 752596003378561046;
 
@@ -34,6 +34,8 @@ namespace GooseBot.Modules
         [Summary("Honk at a good friend")]
         public async Task HonkAsync()
         {
+            SocketUser sender = Context.Message?.Author;
+
             List<ulong> userIds = new List<ulong>();
             IReadOnlyCollection<SocketGuild> guilds = Context.Client.Guilds;
             
@@ -41,7 +43,9 @@ namespace GooseBot.Modules
             {
                 foreach (SocketGuildUser user in guild.Users)
                 {
-                    if (userIds.Contains(user.Id) || user.Id == GooseBotUserId)
+                    if (userIds.Contains(user.Id) 
+                        || user.Id == GooseBotUserId 
+                        || user.Id == sender.Id)
                         continue;
 
                     userIds.Add(user.Id);
