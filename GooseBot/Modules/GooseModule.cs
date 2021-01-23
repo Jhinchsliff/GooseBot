@@ -1,6 +1,7 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -38,20 +39,21 @@ namespace GooseBot.Modules
 
             List<ulong> userIds = new List<ulong>();
             IReadOnlyCollection<SocketGuild> guilds = Context.Client.Guilds;
-            
-            foreach (SocketGuild guild in guilds)
+
+            // GooseBot is only a user in GooseTown so Goosetown should be the only Guild (server) returned.
+            SocketGuild gooseTown = Context.Client.Guilds.FirstOrDefault();
+            await gooseTown.DownloadUsersAsync();
+
+            foreach (SocketGuildUser user in gooseTown.Users)
             {
-                foreach (SocketGuildUser user in guild.Users)
-                {
-                    if (userIds.Contains(user.Id) 
-                        || user.Id == GooseBotUserId 
-                        || user.Id == sender.Id)
-                        continue;
+                if (userIds.Contains(user.Id)
+                        || user.Id == GooseBotUserId
+                        || user.Id == sender?.Id)
+                    continue;
 
-                    userIds.Add(user.Id);
-                }
+                userIds.Add(user.Id);
             }
-
+            
             Random randy = new Random();
             int indexToHonkAt = randy.Next(0, (userIds.Count - 1));
             await ReplyAsync($"<@{userIds[indexToHonkAt]}> https://tenor.com/bgig0.gif");
